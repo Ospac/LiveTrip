@@ -26,7 +26,11 @@ export default function PopularActivityCarouselWrapper({
               className='w-[8.25rem] shrink-0 snap-start md:w-[20.75rem] xl:w-[16.6rem]'
               key={`card-${crypto.randomUUID()}`}
             >
-              <Card activity={activity} alt={activity.title} />
+              <Card
+                activity={activity}
+                alt={activity.title}
+                sizes='(min-width: 1280px) 428px, (min-width: 780px) 533px, 283px'
+              />
             </div>
           );
         })}

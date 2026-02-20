@@ -1,13 +1,18 @@
 import type { NextConfig } from 'next';
+import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
-      bodySizeLimit: '10mb', 
+      bodySizeLimit: '10mb',
     },
   },
 
   images: {
+    domains: [],
+    formats: ['image/avif', 'image/webp'],
+    qualities: [60, 75],
+    minimumCacheTTL: 60 * 60 * 24 * 365,
     remotePatterns: [
       {
         protocol: 'https',
@@ -19,4 +24,9 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// export default nextConfig;
+
+export default withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: true, // default!
+})(nextConfig);

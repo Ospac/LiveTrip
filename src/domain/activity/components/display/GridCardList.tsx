@@ -13,6 +13,7 @@ export default function GridCardList({ activities }: GridCardListProps) {
             activity={activity}
             alt={activity.title}
             key={`card-${crypto.randomUUID()}`}
+            sizes='(min-width: 1280px) calc(25vw - 2.187rem), calc(50vw - 1.375rem)'
             imageClassNames='aspect-1/1'
           />
         );

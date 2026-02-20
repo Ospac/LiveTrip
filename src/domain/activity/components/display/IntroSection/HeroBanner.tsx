@@ -6,16 +6,18 @@ const _BLUR_DATA_URL =
 export default function HeroBanner() {
   return (
     <>
-      <section className='relative w-fit rounded-3xl shadow-sm'>
+      <section className='relative w-full rounded-3xl shadow-sm'>
         <div className='absolute right-0 left-0 h-full rounded-3xl bg-linear-to-b from-black/0 to-black/70' />
         <Image
           priority
-          className='aspect-[11/6] h-auto w-full max-w-full rounded-3xl object-cover xl:w-[70rem]'
+          quality={60}
+          className='aspect-[11/6] h-auto w-full max-w-full rounded-3xl object-cover'
           src='/images/activities/unsplash_0yUw1_FEFO0-activity.webp'
+          sizes='(min-width: 1280px) 1120px, calc(98.33vw - 43px)'
           fetchPriority='high'
           placeholder='blur'
           blurDataURL={_BLUR_DATA_URL}
-          alt=''
+          alt='HeroBanner'
           width={1120}
           height={610}
         />

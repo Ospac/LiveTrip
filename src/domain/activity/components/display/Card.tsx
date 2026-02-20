@@ -8,26 +8,35 @@ interface CardProps {
   activity: Activity;
   alt?: string;
   imageClassNames?: string;
+  sizes: string;
 }
 const _GRAY_BLUR_DATA_URL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8++7TGQAJOAObFkNrgwAAAABJRU5ErkJggg==';
 
-export default function Card({ activity, alt, imageClassNames }: CardProps) {
+export default function Card({
+  activity,
+  alt,
+  imageClassNames,
+  sizes,
+}: CardProps) {
   const { id, title, price, bannerImageUrl, rating, reviewCount } = activity;
   const priceAsKorCurrency = price.toLocaleString('ko-KR');
 
   return (
-    <div className='relative mb-20 min-w-[8.25rem] md:w-full'>
+    <div className='relative mb-20 aspect-square min-w-[8.25rem] md:w-full'>
       <Link href={`/experiences/${id}`}>
         <ImageWithFallback
-          fallback='/images/fallback_cloud.webp'
-          src={bannerImageUrl}
+          priority
+          quality={60}
           width={700}
           height={700}
+          src={bannerImageUrl}
+          fallback='/images/fallback_cloud.webp'
+          sizes={sizes}
           alt={alt ?? title}
           placeholder='blur'
           blurDataURL={_GRAY_BLUR_DATA_URL}
-          loading='lazy'
+          fetchPriority='high'
           className={cx(
             'aspect-3/4 max-w-full rounded-[1.125rem] object-cover md:aspect-1/1 md:rounded-4xl',
             imageClassNames
