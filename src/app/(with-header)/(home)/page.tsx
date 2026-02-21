@@ -21,6 +21,14 @@ const PopularActivitySection = dynamic(
   { loading: () => <PopularActivitySectionSkeleton /> }
 );
 
+const PopularActivityPrefetch = dynamic(
+  () =>
+    import(
+      '@/domain/activity/components/display/PopularActivitySection/PopularActivityPrefetch'
+    ),
+  { loading: () => <PopularActivitySectionSkeleton /> }
+);
+
 const ToastLayer = dynamic(
   () => import('@/domain/activity/components/display/ToastLayer')
 );
@@ -36,7 +44,9 @@ export default async function Home({
     <>
       <IntroSection />
       <div className='flex-center w-full flex-col gap-20'>
-        <PopularActivitySection />
+        <PopularActivitySection>
+          <PopularActivityPrefetch />
+        </PopularActivitySection>
         <AllActivitySection sort={sort} category={category}>
           <AllActivityPrefetch
             key={`${sort}-${category}`}
