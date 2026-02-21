@@ -99,7 +99,7 @@ export default function MyActivitySection() {
 
   return (
     <>
-      <ModalContainer dialogRef={deleteDialog.dialogRef}>
+      <ModalContainer dialogRef={deleteDialog.dialogRef} label='체험 삭제 확인'>
         <AlertModalContents
           message='체험을 삭제하시겠어요?'
           confirmButtonText='삭제하기'

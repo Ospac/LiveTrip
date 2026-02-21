@@ -42,7 +42,7 @@ export default function SearchForm() {
         className='w-full rounded-3xl py-3.5 pl-12 shadow-md md:pl-14'
         defaultValue={q || ''}
       />
-      <button className='bg-primary-500 text-14 absolute right-2 rounded-xl px-4.5 py-2.5 text-white md:right-13'>
+      <button className='bg-primary-600 hover:bg-primary-700 text-14 absolute right-2 rounded-xl px-4.5 py-2.5 text-white transition-colors md:right-13'>
         검색하기
       </button>
     </form>

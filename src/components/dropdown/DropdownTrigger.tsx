@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import type { ReactNode } from 'react';
+import type { KeyboardEvent, ReactNode } from 'react';
 import ArrowDown from '@/components/dropdown/assets/arrow-down.svg';
 import { useDropdownContext } from '@/components/dropdown/dropdownContext';
 import type { Variant } from '@/components/dropdown/type';
@@ -8,6 +8,7 @@ import { cx } from '@/utils/cx';
 interface DropDownTriggerProps {
   variant?: Variant;
   children: ReactNode;
+  ariaLabelledBy?: string;
 }
 
 const DESIGN = {
@@ -26,22 +27,78 @@ function getDesign(variant: Variant = 'mainPage') {
 export default function DropdownTrigger({
   variant = 'mainPage',
   children,
+  ariaLabelledBy,
 }: DropDownTriggerProps) {
-  const { toggle } = useDropdownContext();
+  const { toggle, isOpen, open, close, menuId, triggerId } =
+    useDropdownContext();
 
   const BASE =
     'flex h-full w-full items-center px-5 rounded-2xl focus:outline-none';
   const className = cx(BASE, getDesign(variant));
 
+  const focusMenuItem = (position: 'first' | 'last') => {
+    const menu = document.querySelector<HTMLElement>(`[id="${menuId}"]`);
+
+    if (!menu) {
+      return;
+    }
+
+    const items = menu.querySelectorAll<HTMLButtonElement>(
+      '[data-dropdown-item]'
+    );
+
+    if (items.length === 0) {
+      return;
+    }
+
+    if (position === 'last') {
+      items[items.length - 1].focus();
+
+      return;
+    }
+
+    items[0].focus();
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (!isOpen) {
+        open();
+      }
+      requestAnimationFrame(() => {
+        focusMenuItem('first');
+      });
+    }
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!isOpen) {
+        open();
+      }
+      requestAnimationFrame(() => {
+        focusMenuItem('last');
+      });
+    }
+
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      close();
+    }
+  };
+
   return (
     <button
+      id={triggerId}
       className={className}
-      type='button' /**
-       * ✅ 기본 submit 방지
-       */
+      type='button'
+      aria-haspopup='listbox'
+      aria-expanded={isOpen}
+      aria-controls={menuId}
+      aria-labelledby={ariaLabelledBy}
+      onKeyDown={handleKeyDown}
       onClick={(e) => {
-        e.stopPropagation(); // 이벤트 상위 전파 방지
-        e.preventDefault(); // 혹시 모를 form submit 방지
+        e.stopPropagation();
         toggle();
       }}
     >

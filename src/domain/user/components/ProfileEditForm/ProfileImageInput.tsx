@@ -30,6 +30,7 @@ export default function ProfileImageInput({
   isPending,
   error,
 }: ProfileImageInputProps) {
+  const errorMessage = error?.toString();
   const defaultImage = '/images/default_profile.png';
   const [previewImage, setPreviewImage] = useState(
     profileImageUrl || defaultImage
@@ -76,6 +77,10 @@ export default function ProfileImageInput({
         id='profile-image'
         accept='image/jpg, image/jpeg, image/png, image/webp'
         className='hidden'
+        aria-invalid={Boolean(errorMessage)}
+        aria-describedby={
+          errorMessage ? 'profile-image-error-message' : undefined
+        }
         ref={(e) => {
           ref(e);
           fileInputRef.current = e;
@@ -94,8 +99,7 @@ export default function ProfileImageInput({
             alt='프로필'
             width={128}
             height={128}
-            className='aspect-1/1 cursor-pointer rounded-full object-cover'
-            onClick={handleEditIconClick}
+            className='aspect-1/1 rounded-full object-cover'
           />
         )}
         <button
@@ -112,7 +116,7 @@ export default function ProfileImageInput({
           />
         </button>
       </div>
-      <span>{error?.toString()}</span>
+      <span id='profile-image-error-message'>{errorMessage}</span>
     </div>
   );
 }

@@ -174,7 +174,7 @@ export default function MyReservationsSection() {
 
   return (
     <>
-      <ModalContainer dialogRef={cancelDialog.dialogRef}>
+      <ModalContainer dialogRef={cancelDialog.dialogRef} label='예약 취소 확인'>
         <AlertModalContents
           message='예약을 취소하시겠어요?'
           confirmButtonText='취소하기'
@@ -188,6 +188,7 @@ export default function MyReservationsSection() {
       {/* #68 후기 모달 컴포넌트 하나만 배치 */}
       <ModalContainer
         dialogRef={reviewDialog.dialogRef}
+        label='후기 작성'
         onClose={onCloseModalContainer}
       >
         {reservation && (

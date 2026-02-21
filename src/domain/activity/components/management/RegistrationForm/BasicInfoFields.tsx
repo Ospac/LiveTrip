@@ -20,6 +20,7 @@ export function BasicInfoFields({
   const openPostcode = useDaumPostcodePopup();
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
   const addressInputRef = useRef<HTMLInputElement>(null);
+  const descriptionErrorId = 'description-error-message';
 
   const handleAddressSelect = useCallback(
     (data: Address) => {
@@ -45,7 +46,7 @@ export function BasicInfoFields({
         setIsPostcodeOpen(false);
       },
     });
-  }, [isPostcodeOpen, openPostcode]);
+  }, [handleAddressSelect, isPostcodeOpen, openPostcode]);
 
   return (
     <>
@@ -72,7 +73,7 @@ export function BasicInfoFields({
       <Controller
         name='category'
         control={control}
-        render={({ field, fieldState: { error } }) => {
+        render={({ field }) => {
           return (
             <SelectDropdown
               required
@@ -97,12 +98,15 @@ export function BasicInfoFields({
           설명<span className='ml-1 text-red-500'>*</span>
         </label>
         <textarea
+          {...register('description')}
+          id='description'
+          aria-invalid={Boolean(errors.description)}
+          aria-describedby={errors.description ? descriptionErrorId : undefined}
           className='focus:border-primary-500 focus:ring-primary-100 min-h-[180px] w-full rounded-2xl border border-gray-100 bg-white px-5 py-4 text-base text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:outline-none'
           placeholder='체험에 대한 설명을 입력해 주세요'
-          {...register('description')}
         />
         {errors.description && (
-          <p className='text-sm text-red-500'>
+          <p id={descriptionErrorId} className='text-sm text-red-500'>
             {errors.description.message?.toString()}
           </p>
         )}
@@ -133,15 +137,23 @@ export function BasicInfoFields({
         name='address'
         control={control}
         render={({ field, fieldState: { error } }) => {
+          const addressErrorId = 'address-error-message';
+
           return (
-            <label className='flex w-full flex-col text-sm font-medium text-gray-900'>
-              <span className='inline-flex items-center'>
+            <div className='flex w-full flex-col text-sm font-medium text-gray-900'>
+              <label
+                htmlFor='address-search-input'
+                className='inline-flex items-center'
+              >
                 주소<span className='ml-1 text-red-500'>*</span>
-              </span>
+              </label>
               <div className='mt-2 flex gap-2'>
                 <input
                   {...field}
                   readOnly
+                  id='address-search-input'
+                  aria-invalid={Boolean(error)}
+                  aria-describedby={error ? addressErrorId : undefined}
                   className='focus:border-primary-500 h-[54px] flex-1 rounded-2xl border border-gray-100 bg-gray-50 px-4 text-gray-900 transition-colors placeholder:text-gray-400 focus:outline-none'
                   placeholder='주소를 검색해 주세요'
                   ref={(el) => {
@@ -154,17 +166,17 @@ export function BasicInfoFields({
                 <button
                   type='button'
                   className='w-28 rounded-xl bg-gray-100'
-                  onClick={() =>
-                    openPostcode({ onComplete: handleAddressSelect })
-                  }
+                  onClick={handleOpenPostcode}
                 >
                   주소 검색
                 </button>
               </div>
               {error && (
-                <p className='mt-1 text-sm text-red-500'>{error.message}</p>
+                <p id={addressErrorId} className='mt-1 text-sm text-red-500'>
+                  {error.message}
+                </p>
               )}
-            </label>
+            </div>
           );
         }}
       />

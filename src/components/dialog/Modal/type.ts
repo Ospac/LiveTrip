@@ -4,6 +4,9 @@ export interface ModalProps extends PropsWithChildren {
   dialogRef: RefObject<HTMLDialogElement | null>;
   onClose?: (...args: unknown[]) => void;
   classNames?: string;
+  labelledBy?: string;
+  describedBy?: string;
+  label?: string;
 }
 
 export interface AlertModalContentsProps {

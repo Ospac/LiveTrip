@@ -150,7 +150,11 @@ export default function InnerRegistrationForm({
         </Button>
       </div>
 
-      <ModalContainer dialogRef={dialogRef} onClose={onCancel}>
+      <ModalContainer
+        dialogRef={dialogRef}
+        label='페이지 이탈 확인'
+        onClose={onCancel}
+      >
         <ClientConfirmModal
           message={`저장되지 않았습니다.\n 정말 뒤로 가시겠습니까?`}
           cancelText='아니오'

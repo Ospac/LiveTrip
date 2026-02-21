@@ -55,14 +55,14 @@ export default function Card({
             />
             <div className='text-12 md:text-14 flex gap-0.5 font-medium'>
               <span className=' '>{rating.toFixed(1)}</span>
-              <span className='text-gray-400'>({reviewCount})</span>
+              <span className='text-gray-600'>({reviewCount})</span>
             </div>
           </div>
           <div>
             <span className='text-15 md:text-20 font-bold'>
               ₩{priceAsKorCurrency}
             </span>
-            <span className='text-12 md:text-14 font-semibold text-gray-400'>
+            <span className='text-12 md:text-14 font-semibold text-gray-600'>
               {' / 인'}
             </span>
           </div>

@@ -73,7 +73,12 @@ export function ToastContainer() {
 
   return (
     <>
-      <div className='absolute flex flex-col gap-2' id='toast-container'>
+      <div
+        className='absolute flex flex-col gap-2'
+        id='toast-container'
+        aria-live='polite'
+        aria-atomic='true'
+      >
         {transitionToasts((style, _toast, _, index) => {
           return (
             <ToastComponent
@@ -127,6 +132,7 @@ function ToastComponent({
     <animated.div
       ref={toastRef}
       popover='manual'
+      role={eventType === 'error' ? 'alert' : 'status'}
       className='flex-center text-18 inset-auto right-1/2 bottom-40 left-1/2 w-max -translate-x-1/2 gap-6 rounded-[1.875rem] bg-white px-8 py-4 font-medium shadow-sm'
       style={{
         ...style,
@@ -138,6 +144,8 @@ function ToastComponent({
         <span>{message}</span>
       </div>
       <button
+        type='button'
+        aria-label='토스트 닫기'
         onClick={() => {
           deleteToastByIndex(index);
         }}

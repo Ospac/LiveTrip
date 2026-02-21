@@ -11,12 +11,16 @@ import { useRef, useState } from 'react';
 
 export function useDialog() {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const lastFocusedElementRef = useRef<HTMLElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const openDialog = () => {
     if (!dialogRef.current) {
       return;
     }
+
+    lastFocusedElementRef.current =
+      document.activeElement as HTMLElement | null;
     dialogRef.current.showModal();
     setIsOpen(true);
   };
@@ -25,6 +29,7 @@ export function useDialog() {
       return;
     }
     dialogRef.current.close();
+    lastFocusedElementRef.current?.focus();
     setIsOpen(false);
   };
 

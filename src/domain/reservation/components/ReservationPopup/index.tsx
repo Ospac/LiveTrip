@@ -1,7 +1,7 @@
 /* eslint-disable react-you-might-not-need-an-effect/you-might-not-need-an-effect */
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { BottomSheetContainer } from '@/components/dialog/BottomSheet/BottomSheetContainer';
 import { useDialog } from '@/components/dialog/useDialog';
 import SelectDropdown from '@/components/dropdown/SelectDropdown';
@@ -33,6 +33,9 @@ export default function ReservationPopup({
   );
   const [isBottomSheet, setIsBottomSheet] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
+  const popupTitleId = useId();
 
   const { dialogRef, hideDialog } = useDialog();
 
@@ -113,6 +116,9 @@ export default function ReservationPopup({
       return;
     }
 
+    previouslyFocusedElementRef.current = document.activeElement as HTMLElement;
+    closeButtonRef.current?.focus();
+
     const handleClickOutside = (event: MouseEvent) => {
       if (
         popupRef.current &&
@@ -122,10 +128,19 @@ export default function ReservationPopup({
       }
     };
 
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
     document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+      previouslyFocusedElementRef.current?.focus();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, isBottomSheet]);
@@ -146,12 +161,14 @@ export default function ReservationPopup({
     return (
       <>
         <div className='mb-6 flex items-center justify-between'>
-          <h2 className='text-xl font-bold text-gray-900'>
+          <h2 id={popupTitleId} className='text-xl font-bold text-gray-900'>
             {formatDate(date)}
           </h2>
           <button
+            ref={closeButtonRef}
             type='button'
             className='text-gray-400 hover:text-gray-600'
+            aria-label='예약 팝업 닫기'
             onClick={closeHandler || onClose}
           >
             ✕
@@ -257,6 +274,7 @@ export default function ReservationPopup({
         isOpen={isOpen}
         dialogRef={dialogRef}
         hideDialog={hideDialog}
+        label='예약 상세 내역'
         onClose={onClose}
       >
         {({ closeDialog }) => renderContent(closeDialog as () => void)}
@@ -267,6 +285,10 @@ export default function ReservationPopup({
   return (
     <div
       ref={popupRef}
+      role='dialog'
+      aria-modal='true'
+      aria-labelledby={popupTitleId}
+      tabIndex={-1}
       className='absolute z-[100] w-[350px] overflow-visible rounded-2xl bg-white p-6 shadow-2xl'
       style={{
         top: `${position.top}px`,

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import Dropdown from '@/components/dropdown/Dropdown';
 import type { Variant } from '@/components/dropdown/type';
 
@@ -45,6 +45,7 @@ export default function SelectDropdown({
   onSelect,
   defaultValue,
 }: DropdownProps) {
+  const labelId = useId();
   const [selected, setSelected] = useState<string | undefined>(defaultValue);
 
   const handleSelect = (value: string) => {
@@ -61,13 +62,16 @@ export default function SelectDropdown({
   return (
     <div>
       {titleLabel && (
-        <label className="block mb-2 text-sm text-black">
+        <label id={labelId} className='mb-2 block text-sm text-black'>
           {titleLabel}
-          {required ? <span className="ml-1 text-red-500">*</span> : null}
+          {required ? <span className='ml-1 text-red-500'>*</span> : null}
         </label>
       )}
       <Dropdown width={width}>
-        <Dropdown.Trigger variant={variant}>
+        <Dropdown.Trigger
+          variant={variant}
+          ariaLabelledBy={titleLabel ? labelId : undefined}
+        >
           <div className={triggerDesign}>{displayLabel}</div>
         </Dropdown.Trigger>
         <Dropdown.Menu position={position}>
@@ -77,6 +81,7 @@ export default function SelectDropdown({
                 key={option.value}
                 value={option.value}
                 variant={variant}
+                selected={selected === option.value}
                 onSelect={handleSelect}
               >
                 {option.label}

@@ -123,7 +123,7 @@ function NotificationItem({ n, onClick }: NotificationItemProps) {
         </span>
         되었어요.
       </div>
-      <h3 className='text-12 leading-3 font-medium text-gray-400'>
+      <h3 className='text-12 leading-3 font-medium text-gray-600'>
         {formattedMilliseconds(now - parsed.updatedTime.getTime())}
       </h3>
     </div>

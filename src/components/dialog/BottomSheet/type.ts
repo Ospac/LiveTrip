@@ -6,6 +6,7 @@ export interface BottomSheetProps {
   dialogRef: RefObject<HTMLDialogElement | null>;
   onClose?: (...args: unknown[]) => void;
   hideDialog: () => void;
+  label?: string;
 }
 export interface CloseDialogParameter {
   onRest?: () => void;
