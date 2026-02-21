@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getAuth } from '@/utils/getAuth';
 
-const BACKEND_URL = 'https://sp-globalnomad-api.vercel.app/17-4/activities/image';
+const BACKEND_URL =
+  'https://sp-globalnomad-api.vercel.app/17-4/activities/image';
 
 export async function POST(req: Request) {
   const token = await getAuth();

@@ -1,6 +1,9 @@
-import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import HeroBanner from '@/domain/activity/components/display/IntroSection/HeroBanner';
-import SearchForm from '@/domain/activity/components/display/IntroSection/SearchForm';
+
+const SearchForm = dynamic(
+  () => import('@/domain/activity/components/display/IntroSection/SearchForm')
+);
 
 export default function IntroSection() {
   return (
@@ -10,9 +13,7 @@ export default function IntroSection() {
         <h1 className='text-16 md:text-32 text-center font-bold'>
           무엇을 체험하고 싶으신가요?
         </h1>
-        <Suspense fallback={<div>Loading...</div>}>
-          <SearchForm />
-        </Suspense>
+        <SearchForm />
       </div>
     </>
   );

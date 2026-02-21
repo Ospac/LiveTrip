@@ -14,7 +14,17 @@ import type {
   SignUpResponse,
   UserInfo,
 } from '@/domain/user/types';
-import { authEndpoint } from '@/domain/user/utils/auth';
+
+const authEndpoint = {
+  SIGNIN: '/auth/login',
+  USER_INFO: '/users/me',
+  SIGNUP: '/users',
+  NEW_TOKEN: '/auth/tokens',
+  PROFILE_EDIT: '/users/me',
+  PROFILE_IMAGE_CREATE: '/users/me/image',
+  KAKAO_SIGNIN: '/oauth/sign-in/kakao',
+  KAKAO_SIGNUP: '/oauth/sign-up/kakao',
+};
 
 export async function getUserInfo(): Promise<UserInfo> {
   return await apiFetch(authEndpoint.USER_INFO);
@@ -168,7 +178,3 @@ export const mutateProfileImageCreate = async (
 
   return res;
 };
-
-// ====================================
-// OAuth Utility Functions
-// ====================================

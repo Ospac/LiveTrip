@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Button from '@/components/button/Button';
 import kakaoIcon from '@/domain/user/assets/icon_kakao.svg';
 import type { KaKaoAuthButtonProps } from '@/domain/user/types';
-import { getKaKaoAuthroizeURL } from '@/domain/user/utils/auth';
+import { getKaKaoAuthroizeURL } from '@/domain/user/utils/kakaoAuth';
 
 export default function KaKaoAuthButton({
   text,

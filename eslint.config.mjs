@@ -1,5 +1,5 @@
 import { sheriff } from 'eslint-config-sheriff';
-import nextPlugin from '@next/eslint-plugin-next';
+// import nextPlugin from '@next/eslint-plugin-next';
 
 const sheriffOptions = {
   react: true,

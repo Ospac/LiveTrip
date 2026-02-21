@@ -1,8 +1,13 @@
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import logo from '@/components/header/asset/logo.svg';
 import logoSymbol from '@/components/header/asset/logo-symbol.svg';
-import SessionNav from '@/components/header/SessionNav';
+import SessionNavSkeleton from '@/components/header/SessionNavSkeleton';
+
+const SessionNav = dynamic(() => import('@/components/header/SessionNav'), {
+  loading: () => <SessionNavSkeleton />,
+});
 
 export default async function Header() {
   return (
@@ -10,18 +15,22 @@ export default async function Header() {
       {/* 좌측 로고 영역 */}
       <Link href='/'>
         <Image
+          priority
           src={logoSymbol}
           alt='LiveTrip Logo'
           width={40}
           height={40}
           className='pr-4 md:hidden'
+          fetchPriority='high'
         />
         <Image
+          priority
           src={logo}
           alt='LiveTrip Logo'
           width={140}
           height={20}
           className='hidden pr-4 md:block'
+          fetchPriority='high'
         />
       </Link>
       {/* 우측 버튼/링크 영역 */}
