@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "analyze": "cross-env ANALYZE=true next build"
+    "analyze": "cross-env ANALYZE=true NODE_ENV=production next build&&source-map-explorer .next/static/**/*.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

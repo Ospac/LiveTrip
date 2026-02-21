@@ -32,9 +32,7 @@ export function ReviewModalContents({
   onRatingChange,
   text,
   onTextChange,
-  formAction,
   hideModal,
-  isPending,
 }: ReviewModalContentsProps) {
   const [inputCount, setInputCount] = useState<number>(0);
 

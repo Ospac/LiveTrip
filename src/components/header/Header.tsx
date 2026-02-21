@@ -1,8 +1,13 @@
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import logo from '@/components/header/asset/logo.svg';
 import logoSymbol from '@/components/header/asset/logo-symbol.svg';
-import SessionNav from '@/components/header/SessionNav';
+import SessionNavSkeleton from '@/components/header/SessionNavSkeleton';
+
+const SessionNav = dynamic(() => import('@/components/header/SessionNav'), {
+  loading: () => <SessionNavSkeleton />,
+});
 
 export default async function Header() {
   return (
