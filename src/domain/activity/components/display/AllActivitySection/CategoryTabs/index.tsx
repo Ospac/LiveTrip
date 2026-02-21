@@ -1,24 +1,30 @@
-import * as SVG from '@/domain/activity/components/display/AllActivitySection/CategoryTabs/svg';
+import {
+  ArtIcon,
+  BusIcon,
+  FoodIcon,
+  TourIcon,
+  WellbeingIcon,
+} from '@/domain/activity/components/display/AllActivitySection/CategoryTabs/svg';
 
 export const categoryTabs = [
   {
-    icon: <SVG.ArtIcon />,
+    icon: <ArtIcon />,
     title: '문화 · 예술',
   },
   {
-    icon: <SVG.FoodIcon />,
+    icon: <FoodIcon />,
     title: '식음료',
   },
   {
-    icon: <SVG.TourIcon />,
+    icon: <TourIcon />,
     title: '투어',
   },
   {
-    icon: <SVG.BusIcon />,
+    icon: <BusIcon />,
     title: '관광',
   },
   {
-    icon: <SVG.WellbeingIcon />,
+    icon: <WellbeingIcon />,
     title: '웰빙',
   },
 ];

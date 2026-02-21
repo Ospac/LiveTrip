@@ -3,6 +3,7 @@ import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const nextConfig: NextConfig = {
   experimental: {
+    optimizePackageImports: ['next-auth', 'zod', '@react-spring/web'],
     serverActions: {
       bodySizeLimit: '10mb',
     },
