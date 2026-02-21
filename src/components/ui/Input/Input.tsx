@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { InputProps } from '@/components/ui/Input/type';
 
 export default function Input({
@@ -13,11 +13,17 @@ export default function Input({
   autoComplete = '',
   ...rest
 }: InputProps) {
+  const generatedId = useId();
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
   const isPassword = type === 'password';
   const hasError = Boolean(error);
+  const inputId = rest.id || generatedId;
+  const errorMessage = error?.toString();
+  const errorId = `${inputId}-error`;
+  const describedBy = [rest['aria-describedby'], hasError ? errorId : undefined]
+    .filter(Boolean)
+    .join(' ');
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -45,7 +51,10 @@ export default function Input({
   return (
     <div className='flex w-full flex-col'>
       {label && (
-        <label className='mb-2 text-sm font-medium text-gray-900'>
+        <label
+          htmlFor={inputId}
+          className='mb-2 text-sm font-medium text-gray-900'
+        >
           {label}
           {rest.required ? <span className='ml-1 text-red-500'>*</span> : null}
         </label>
@@ -54,9 +63,12 @@ export default function Input({
       <div className={`relative w-[350px] ${className}`}>
         <input
           {...rest}
+          id={inputId}
           type={getInputType()}
           placeholder={placeholder}
           autoComplete={autoComplete}
+          aria-invalid={hasError}
+          aria-describedby={describedBy || undefined}
           className={`h-[54px] w-full rounded-2xl border px-4 ${isPassword ? 'pr-12' : ''} text-gray-950 transition-colors placeholder:text-gray-400 focus:outline-none ${getBorderColor()} disabled:bg-gray-25`}
           onFocus={() => {
             setIsFocused(true);
@@ -70,6 +82,8 @@ export default function Input({
           <button
             type='button'
             className='absolute top-1/2 right-4 -translate-y-1/2'
+            aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 보이기'}
+            aria-pressed={showPassword}
             onClick={togglePasswordVisibility}
           >
             <Image
@@ -87,8 +101,8 @@ export default function Input({
       </div>
 
       {hasError && (
-        <span className='mt-1 ml-2 text-xs text-red-500'>
-          {error?.toString()}
+        <span id={errorId} className='mt-1 ml-2 text-xs text-red-500'>
+          {errorMessage}
         </span>
       )}
     </div>

@@ -18,6 +18,9 @@ export function ModalContainer({
   dialogRef,
   onClose,
   classNames,
+  labelledBy,
+  describedBy,
+  label,
   children,
 }: ModalProps) {
   const closeDialog = (e: SyntheticEvent) => {
@@ -31,6 +34,10 @@ export function ModalContainer({
   return (
     <dialog
       ref={dialogRef}
+      aria-modal='true'
+      aria-labelledby={labelledBy}
+      aria-describedby={describedBy}
+      aria-label={label}
       className={cx(
         `flex flex-col items-center rounded-[1.875rem] bg-white p-[1.875rem] text-gray-950 drop-shadow not-open:hidden backdrop:bg-black/50`,
         positionCenter,

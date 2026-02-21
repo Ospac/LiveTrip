@@ -3,6 +3,8 @@ import { createContext, useContext } from 'react';
 export interface DropdownContextValue {
   isOpen: boolean;
   width?: number | undefined;
+  triggerId: string;
+  menuId: string;
   open: () => void;
   close: () => void;
   toggle: () => void;

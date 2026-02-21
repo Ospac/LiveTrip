@@ -8,6 +8,7 @@ interface DropdownItemsProps {
   children: ReactNode;
   value: string;
   onSelect: (value: string) => void;
+  selected?: boolean;
 }
 
 const DESIGN = {
@@ -28,23 +29,99 @@ export default function DropdownItems({
   children,
   value,
   onSelect,
+  selected = false,
 }: DropdownItemsProps) {
-  const { close } = useDropdownContext();
+  const { close, triggerId } = useDropdownContext();
 
   const BASE =
     'hover:bg-primary-100 flex h-[48px] items-center text-gray-900 hover:text-gray-600 hover:rounded-xl';
   const className = cx(BASE, getDesign(variant));
 
+  const focusSiblingItem = (
+    currentButton: HTMLButtonElement,
+    movement: 'next' | 'prev' | 'first' | 'last'
+  ) => {
+    const menu = currentButton.closest('[role="listbox"]');
+
+    if (!menu) {
+      return;
+    }
+
+    const items = [
+      ...menu.querySelectorAll<HTMLButtonElement>('[data-dropdown-item]'),
+    ];
+    const currentIndex = items.indexOf(currentButton);
+
+    if (items.length === 0 || currentIndex === -1) {
+      return;
+    }
+
+    if (movement === 'first') {
+      items[0]?.focus();
+
+      return;
+    }
+    if (movement === 'last') {
+      items[items.length - 1]?.focus();
+
+      return;
+    }
+
+    if (movement === 'next') {
+      items[(currentIndex + 1) % items.length]?.focus();
+
+      return;
+    }
+
+    items[(currentIndex - 1 + items.length) % items.length]?.focus();
+  };
+
   return (
     <button
-        type="button"
-        className={className}
-        onClick={(e) => {
-          e.stopPropagation(); // 이벤트 버블링 방지
-          e.preventDefault();  // 혹시 모를 form submit 방지
-          onSelect(value);
+      data-dropdown-item
+      type='button'
+      role='option'
+      tabIndex={-1}
+      aria-selected={selected}
+      className={className}
+      onClick={(e) => {
+        e.stopPropagation();
+        onSelect(value);
+        close();
+      }}
+      onKeyDown={(e) => {
+        const { currentTarget, key } = e;
+
+        if (key === 'ArrowDown') {
+          e.preventDefault();
+          focusSiblingItem(currentTarget, 'next');
+        }
+
+        if (key === 'ArrowUp') {
+          e.preventDefault();
+          focusSiblingItem(currentTarget, 'prev');
+        }
+
+        if (key === 'Home') {
+          e.preventDefault();
+          focusSiblingItem(currentTarget, 'first');
+        }
+
+        if (key === 'End') {
+          e.preventDefault();
+          focusSiblingItem(currentTarget, 'last');
+        }
+
+        if (key === 'Escape') {
+          e.preventDefault();
           close();
-        }}
+          const trigger = document.querySelector<HTMLElement>(
+            `[id="${triggerId}"]`
+          );
+
+          trigger?.focus();
+        }
+      }}
     >
       <li className={className}>{children}</li>
     </button>

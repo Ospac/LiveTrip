@@ -64,7 +64,7 @@ export default function SessionNav() {
             <button
               type='button'
               aria-label='알림 열기'
-              className='items-center focus:outline-none'
+              className='focus-visible:ring-primary-500 items-center rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none'
               onClick={() => {
                 setShowNotification((v) => !v);
               }}

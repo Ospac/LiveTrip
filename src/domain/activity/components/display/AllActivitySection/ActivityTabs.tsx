@@ -29,6 +29,7 @@ export function ActivityTabs({ category }: ActivityTabsProps) {
   return (
     <div className='scrollbar-hide sticky top-1 z-2 mb-6 flex gap-2 overflow-scroll overflow-y-hidden md:mb-8 md:gap-5'>
       <button
+        aria-label='전체 보기'
         className={cx(
           _BUTTON_DEFAULT_CLASS_NAME,
           !category && _BUTTON_SELECTED_CLASS_NAME
@@ -40,7 +41,8 @@ export function ActivityTabs({ category }: ActivityTabsProps) {
       {categoryTabs.map((tab) => {
         return (
           <button
-            key={`tab-${crypto.randomUUID()}`}
+            key={tab.title}
+            aria-label={tab.title}
             className={cx(
               _BUTTON_DEFAULT_CLASS_NAME,
               isCategorySelected(tab.title) && _BUTTON_SELECTED_CLASS_NAME

@@ -1,4 +1,4 @@
-import { type SyntheticEvent, useCallback, useEffect } from 'react';
+import { type SyntheticEvent, useCallback, useEffect, useRef } from 'react';
 import { animated, config, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import type {
@@ -37,7 +37,10 @@ export function BottomSheetContainer({
   hideDialog: hideDialogElement,
   dialogRef,
   onClose,
+  label,
 }: BottomSheetProps) {
+  const lastFocusedElementRef = useRef<HTMLElement | null>(null);
+
   const [{ y }, dialogSpring] = useSpring(() => {
     return {
       config: { duration: SPRING_DURATION, ...config.slow },
@@ -95,14 +98,24 @@ export function BottomSheetContainer({
   // NOTE: Open일때 Spring UI 적용
   useEffect(() => {
     if (isOpen) {
+      lastFocusedElementRef.current =
+        document.activeElement as HTMLElement | null;
       closeDialogUI({ immediate: true });
       openDialogUI();
     }
   }, [isOpen, dialogSpring, openDialogUI, closeDialogUI]);
 
+  useEffect(() => {
+    if (!isOpen && lastFocusedElementRef.current) {
+      lastFocusedElementRef.current.focus();
+    }
+  }, [isOpen]);
+
   return (
     <animated.dialog
       ref={dialogRef}
+      aria-modal='true'
+      aria-label={label}
       {...dragBind()}
       style={{ y }}
       className={

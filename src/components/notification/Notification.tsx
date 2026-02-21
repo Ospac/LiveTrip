@@ -155,7 +155,7 @@ export default function Notification({ onClose }: { onClose?: () => void }) {
             알림 {totalCount}개
           </h2>
           <button
-            className='text-12 relative flex h-3 items-center leading-[12px] font-medium text-gray-400'
+            className='text-12 relative flex h-3 items-center leading-[12px] font-medium text-gray-600'
             type='button'
             onClick={onClose}
           >

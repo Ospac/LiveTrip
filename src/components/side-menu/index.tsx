@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import type {
   MenuItem,
   MenuItemType,
@@ -54,7 +54,6 @@ const PRIMARY_FILTER =
   'brightness(0) saturate(100%) invert(43%) sepia(96%) saturate(1352%) hue-rotate(188deg) brightness(119%) contrast(119%)';
 
 export default function SideMenu({ className = '' }: SideMenuProps) {
-  const router = useRouter();
   const pathname = usePathname();
 
   /**
@@ -77,22 +76,7 @@ export default function SideMenu({ className = '' }: SideMenuProps) {
     return 'reservationHistory';
   };
 
-  const [activeItem, setActiveItem] = useState<MenuItemType>(getActiveItem());
-
-  const handleMenuClick = (itemId: MenuItemType, href: string) => {
-    setActiveItem(itemId);
-    router.push(href);
-  };
-
-  const handleKeyDown = (
-    e: React.KeyboardEvent,
-    itemId: MenuItemType,
-    href: string
-  ) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      handleMenuClick(itemId, href);
-    }
-  };
+  const activeItem = getActiveItem();
 
   return (
     <div
@@ -102,48 +86,45 @@ export default function SideMenu({ className = '' }: SideMenuProps) {
         className
       )}
     >
-      {/* 메뉴 항목들 */}
-      <div className={SIZE_CONFIG.spacing.menuPadding}>
-        <div className={SIZE_CONFIG.spacing.spaceY}>
+      <nav
+        aria-label='마이페이지 메뉴'
+        className={SIZE_CONFIG.spacing.menuPadding}
+      >
+        <ul className={SIZE_CONFIG.spacing.spaceY}>
           {MENU_ITEMS.map((item) => {
             const isActive = item.id === activeItem;
 
             return (
-              <div
-                key={item.id}
-                tabIndex={0}
-                role='button'
-                className={`flex cursor-pointer items-center rounded-2xl transition-colors ${SIZE_CONFIG.spacing.gap} ${
-                  isActive ? 'bg-primary-100' : 'hover:bg-gray-50'
-                }`}
-                onClick={() => {
-                  handleMenuClick(item.id, item.href);
-                }}
-                onKeyDown={(e) => {
-                  handleKeyDown(e, item.id, item.href);
-                }}
-              >
-                <Image
-                  src={item.iconPath}
-                  alt={item.label}
-                  width={SIZE_CONFIG.iconDefaultSize + 8}
-                  height={SIZE_CONFIG.iconDefaultSize + 8}
-                  style={isActive ? { filter: PRIMARY_FILTER } : {}}
-                  className={cx(
-                    SIZE_CONFIG.iconSize,
-                    isActive ? 'brightness-0 saturate-100' : ''
-                  )}
-                />
-                <span
-                  className={`font-medium ${SIZE_CONFIG.spacing.textSize} ${isActive ? 'text-gray-950' : 'text-gray-600'}`}
+              <li key={item.id}>
+                <Link
+                  href={item.href}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`flex cursor-pointer items-center rounded-2xl transition-colors ${SIZE_CONFIG.spacing.gap} ${
+                    isActive ? 'bg-primary-100' : 'hover:bg-gray-50'
+                  }`}
                 >
-                  {item.label}
-                </span>
-              </div>
+                  <Image
+                    src={item.iconPath}
+                    alt={item.label}
+                    width={SIZE_CONFIG.iconDefaultSize + 8}
+                    height={SIZE_CONFIG.iconDefaultSize + 8}
+                    style={isActive ? { filter: PRIMARY_FILTER } : {}}
+                    className={cx(
+                      SIZE_CONFIG.iconSize,
+                      isActive ? 'brightness-0 saturate-100' : ''
+                    )}
+                  />
+                  <span
+                    className={`font-medium ${SIZE_CONFIG.spacing.textSize} ${isActive ? 'text-gray-950' : 'text-gray-600'}`}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+              </li>
             );
           })}
-        </div>
-      </div>
+        </ul>
+      </nav>
     </div>
   );
 }

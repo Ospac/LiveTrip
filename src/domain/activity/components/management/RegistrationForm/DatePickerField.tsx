@@ -2,7 +2,7 @@
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { format, isDate, parseISO } from 'date-fns';
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, useId, useMemo } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import { cx } from '@/utils/cx';
 
@@ -16,23 +16,38 @@ interface DatePickerFieldProps {
 }
 
 interface CustomInputProps {
+  id?: string;
   value?: string;
   onClick?: () => void;
   placeholder?: string;
   className?: string;
   disabled?: boolean;
+  ariaLabelledBy?: string;
+  ariaLabel?: string;
 }
 
 const DatePickerTrigger = forwardRef<HTMLButtonElement, CustomInputProps>(
   (
-    { value, onClick, placeholder = 'yyyy/mm/dd', className, disabled },
+    {
+      id,
+      value,
+      onClick,
+      placeholder = 'yyyy/mm/dd',
+      className,
+      disabled,
+      ariaLabelledBy,
+      ariaLabel,
+    },
     ref
   ) => {
     return (
       <button
+        id={id}
         ref={ref}
         type='button'
         disabled={disabled}
+        aria-labelledby={ariaLabelledBy}
+        aria-label={ariaLabel}
         className={cx(
           'disabled:bg-gray-25 flex h-[54px] w-full items-center justify-between rounded-2xl border px-4 text-left text-gray-950 transition-colors placeholder:text-gray-400 focus:outline-none disabled:cursor-not-allowed',
           disabled
@@ -61,6 +76,9 @@ export default function DatePickerField({
   className,
   disabled,
 }: DatePickerFieldProps) {
+  const fieldId = useId();
+  const labelId = useId();
+
   const selectedDate = useMemo(() => {
     if (!value) {
       return null;
@@ -74,7 +92,11 @@ export default function DatePickerField({
   return (
     <div className='flex w-full flex-col'>
       {label ? (
-        <label className='mb-2 text-sm font-medium text-gray-900'>
+        <label
+          id={labelId}
+          htmlFor={fieldId}
+          className='mb-2 text-sm font-medium text-gray-900'
+        >
           {label}
         </label>
       ) : null}
@@ -87,10 +109,13 @@ export default function DatePickerField({
         showPopperArrow={false}
         customInput={
           <DatePickerTrigger
+            id={fieldId}
             value={selectedDate ? format(selectedDate, 'yyyy/MM/dd') : ''}
             placeholder={placeholder}
             className={className}
             disabled={disabled}
+            ariaLabelledBy={label ? labelId : undefined}
+            ariaLabel={label ? undefined : placeholder}
           />
         }
         onChange={(date) => {

@@ -1,4 +1,4 @@
-import { type ReactNode, useCallback, useState } from 'react';
+import { type ReactNode, useCallback, useId, useState } from 'react';
 import { DropdownContext } from '@/components/dropdown/dropdownContext';
 import DropdownItems from '@/components/dropdown/DropdownItems';
 import DropdownMenu from '@/components/dropdown/DropdownMenu';
@@ -11,10 +11,13 @@ interface DropdownProps {
   width?: number;
 }
 
-const BASE = 'relative h-[54px] rounded-2xl border transition-colors focus-within:border-primary-500';
+const BASE =
+  'relative h-[54px] rounded-2xl border transition-colors focus-within:border-primary-500';
 
 export default function Dropdown({ children, width }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const triggerId = useId();
+  const menuId = useId();
 
   const open = useCallback(() => {
     setIsOpen(true);
@@ -31,11 +34,13 @@ export default function Dropdown({ children, width }: DropdownProps) {
   const className = cx(
     BASE,
     isOpen ? 'border-primary-500' : 'border-gray-100',
-    width ? `w-[${width}px]` : 'w-full',
+    width ? `w-[${width}px]` : 'w-full'
   );
 
   return (
-    <DropdownContext.Provider value={{ isOpen, open, close, toggle, width }}>
+    <DropdownContext.Provider
+      value={{ isOpen, open, close, toggle, width, triggerId, menuId }}
+    >
       <div ref={dropdownRef} className={className} style={{ width }}>
         {children}
       </div>
