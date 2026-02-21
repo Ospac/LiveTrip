@@ -1,13 +1,16 @@
 {
   "name": "livetrip",
   "version": "0.1.0",
+  "sideEffects": [
+    "*.css"
+  ],
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "analyze": "cross-env ANALYZE=true NODE_ENV=production next build&&source-map-explorer .next/static/**/*.js"
+    "analyze": "cross-env ANALYZE=true NODE_ENV=production next build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
