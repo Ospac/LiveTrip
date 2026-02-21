@@ -2,7 +2,6 @@ import '@/app/globals.css';
 import { cx } from 'class-variance-authority';
 import type { Metadata } from 'next';
 import { Noto_Sans } from 'next/font/google';
-import localFont from 'next/font/local';
 import { SessionProvider } from 'next-auth/react';
 import { ToastContainer } from '@/components/toast/ToastContainer';
 import ReactQueryProvider from '@/utils/react-query/ReactQueryProvider';
@@ -15,13 +14,6 @@ export const metadata: Metadata = {
     images: '/images/open_graph.webp',
   },
 };
-const pretendardVariable = localFont({
-  src: '../../public/font/PretendardVariable.woff2',
-  display: 'swap',
-  weight: '45 920',
-  preload: true,
-  adjustFontFallback: 'Arial',
-});
 const notoSans = Noto_Sans({
   weight: ['300', '700'],
   subsets: ['latin'],
@@ -37,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko'>
-      <body className={cx(pretendardVariable.className, notoSans.variable)}>
+      <body className={cx(notoSans.variable)}>
         <ReactQueryProvider>
           <SessionProvider>
             {children}
